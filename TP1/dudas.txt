@@ -1,0 +1,14 @@
+1- ¿como hacer las operaciones de +, *, /?
+	a. doble precision
+	b. usar librerias (hacer trampa)
+	c. a mano
+
+2- ¿como representar bits?
+	a. a manopla
+	b. usar libreria
+
+3- ¿basamos en IEEE754 o que la funcionalidad la defina python? +0, -0 y /0
+
+4- Escribir funciones test
+
+5- Informe
