@@ -284,30 +284,39 @@ def test():
     total_PASS = mul_equ_noequ_cases + div_cases
 
     pass_cases = 0 
+    fail_cases = 0
     for i in range(len(mul_test)):
         if mul_test[i].d == mul_verification[i]:
             pass_cases+=1
         elif isnan(mul_test[i].d) and isnan(mul_verification[i]):
             pass_cases+=1
+        else:
+            fail_cases+=1
 
     for i in range(len(equ_test)):
         if equ_test[i] == equ_verification[i]:
             pass_cases+=1
+        else:
+            fail_cases+=1
 
     for i in range(len(no_equ_test)):
         if no_equ_test[i] == no_equ_verification[i]:
             pass_cases+=1
+        else:
+            fail_cases+=1
 
     for i in range(len(div_test)):
         if div_test[i].d == div_verification[i]:
             pass_cases+=1
         elif isnan(div_test[i].d) and isnan(div_verification[i]):
             pass_cases+=1
+        else:
+            fail_cases+=1
 
     if pass_cases == total_PASS:
-        print("All cases are OK")
+        print("You pass all cases")
     else:
-        print("NO FUNCIONAAAA")
+        print("You fail in {fail_cases} cases")
 
 test()
 
