@@ -1,6 +1,5 @@
 from math import copysign,isnan
 from re import X
-import numpy as np
 from sympy import false
 
 TBITS = 16                  # Número de bits totales que contiene el número flotante a desarrollar
@@ -178,12 +177,22 @@ class binary16:
     def __eq__(self,other):
         if isnan(self.d) and isnan(other.d): # Debe analizarse por separado el caso de que ambas variables sean "NaN", debido a que
             return True                      # python por defecto considera que toda variables es distinta a un "NaN", incluyendo otro "NaN"
+        elif (self.d == 0.0) and (other.d == -0.0):
+            if(self.bits[0] == other.bits[0]):
+                return True
+            else:
+                return False
         return (self.d == other.d)  # Si solo una de las variables es NaN, la respuesta será False, tal como se espera.
                                     # Si ninguna es NaN, la comparación funciona de la forma esperada
 
     def __ne__(self,other):
         if isnan(self.d) and isnan(other.d): # Análogamente al caso anterior, comparaciones de desigualdad entre un "NaN"
             return False                     # y otra variable (incluyendo "NaN") devolverán siempre "True". Por ello, se analiza este caso
+        elif (self.d == 0.0) and (other.d == -0.0):
+            if(self.bits[0] == other.bits[0]):
+                return False
+            else:
+                return True
         return (self.d != other.d)
 
 
@@ -192,45 +201,126 @@ class binary16:
 #       TEST BENCH      #
 #########################
 
+#############################################################################################################
+#   Se utilizo la siguiente pagina web para verificar los resultados obtenidos de los siguientes arrays     #
+#       https://oletus.github.io/float16-simulator.js/                                                      #
+#       mul_verification[]                                                                                  #
+#       div_verification[]                                                                                  #
+#       equ_verification[]                                                                                  #
+#       no_equ_verification[]                                                                               #
+#############################################################################################################
+
 #Todos los numeros para usar en el testeo
-#   Pos 0 y 1: float
-#
 num_test = [
-            ["float", "float", "sub-float", "sub-float", "0", "-0", "inf", "-inf", "nan"],
-            [5.984634, 2.434947, 0.345788, 0.872394, 0.0, -0.0, float('inf'), float('-inf'), float('nan')]
+            ["float", "sub-float", "0", "-0", "inf", "-inf", "nan"],
+            [5.984634, 0.345788, 0.0, -0.0, float('inf'), float('-inf'), float('nan')]
             ]
 
+mul_verification = [35.8125, 2.068359375, 0.0, -0.0, float('inf'), float('-inf'), float('nan'), 
+                        0.1195068359375, 0.0, -0.0, float('inf'), float('-inf'), float('nan'),
+                            0.0, -0.0, float('nan'), float('nan'), float('nan'), 
+                                0.0, float('nan'), float('nan'), float('nan'),
+                                    float('inf'), float('-inf'), float('nan'),
+                                        float('inf'), float('nan'), 
+                                            float('nan')]
+
+div_verification = [1.0,17.296875,float('inf'),float('-inf'),0.0,-0.0,float('nan'),
+                    0.0577392578125,1.0,float('inf'),float('-inf'),0.0,-0.0,float('nan'),
+                    0.0,0.0,float('nan'),float('nan'),0.0,-0.0,float('nan'),
+                    -0.0,-0.0,float('nan'),float('nan'),-0.0,0.0,float('nan'),
+                    float('inf'),float('inf'),float('inf'),float('-inf'),float('nan'),float('nan'),float('nan'),
+                    float('-inf'),float('-inf'),float('-inf'),float('inf'),float('nan'),float('nan'),float('nan'),
+                    float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan')]
+
+equ_verification = [True,False,False,False,False,False,False,
+                        True,False,False,False,False,False,
+                            True,False,False,False,False,
+                                True,False,False,False,
+                                    True,False,False,
+                                        True,False,
+                                            True]
+
+no_equ_verification = [False,True,True,True,True,True,True,
+                            False,True,True,True,True,True,
+                                False,True,True,True,True,
+                                    False,True,True,True,
+                                        False,True,True,
+                                            False,True,
+                                                False]
+
 def test():
-    #Numeros de test
+    #Tomo los numeros de test y lo paso a 16 bits
     num_test_bin16 = []
     for i in range(len(num_test[1])):
         num_test_bin16.append(binary16(num_test[1][i]))
     
-
-    mul = lambda a, b : a*b
-    div = lambda a, b : a/b
-    equ = lambda a, b : a==b
-    no_equ = lambda a, b : a!=b
-    #test_operacion(num_test_bin16, mul)
-    #test_operacion(num_test_bin16, div)
-    test_operacion(num_test_bin16, equ)
-    #test_operacion(num_test_bin16, no_equ)
-
-
-def test_operacion(num_test_bin16, op):
+    #Creo arreglo de los resultados multiplicando todos los casos
+    mul_test = []
+    for i in range(len(num_test_bin16)):
+        for j in range(i, len(num_test_bin16)):
+            mul_test.append(num_test_bin16[i]*num_test_bin16[j])
+    
+    #Creo arreglo de los resultados comparando con == todos los casos
+    equ_test = []
+    for i in range(len(num_test_bin16)):
+        for j in range(i, len(num_test_bin16)):
+            equ_test.append(num_test_bin16[i]==num_test_bin16[j])
+    
+    #Creo arreglo de los resultados comparando con != todos los casos
+    no_equ_test = []
+    for i in range(len(num_test_bin16)):
+        for j in range(i, len(num_test_bin16)):
+            no_equ_test.append(num_test_bin16[i]!=num_test_bin16[j])
+    
+    #Creo arreglo de los resultados multiplicando todos los casos
+    div_test = []
     for i in range(len(num_test_bin16)):
         for j in range(len(num_test_bin16)):
-            x = op(num_test_bin16[i],num_test_bin16[j])
-            print("{}, {} = {}".format(num_test[0][i], num_test[0][j], x))
+            div_test.append(num_test_bin16[i]/num_test_bin16[j])
+
+    mul_equ_noequ_cases = 28*3
+    div_cases = 49
+    total_PASS = mul_equ_noequ_cases + div_cases
+
+    pass_cases = 0 
+    for i in range(len(mul_test)):
+        if mul_test[i].d == mul_verification[i]:
+            pass_cases+=1
+        elif isnan(mul_test[i].d) and isnan(mul_verification[i]):
+            pass_cases+=1
+
+    for i in range(len(equ_test)):
+        if equ_test[i] == equ_verification[i]:
+            pass_cases+=1
+
+    for i in range(len(no_equ_test)):
+        if no_equ_test[i] == no_equ_verification[i]:
+            pass_cases+=1
+
+    for i in range(len(div_test)):
+        if div_test[i].d == div_verification[i]:
+            pass_cases+=1
+        elif isnan(div_test[i].d) and isnan(div_verification[i]):
+            pass_cases+=1
+
+    if pass_cases == total_PASS:
+        print("All cases are OK")
+    else:
+        print("NO FUNCIONAAAA")
 
 test()
 
-#Pensar el metodo de verificacion 
-#Chequear las excepciones para:
-#   div
-#   equ
-#   no equ
-#   sumas de FAIL y PASS
 
-
-#ALALALLA
+# def test_operacion(num_test_bin16, operando):
+#     for i in range(len(num_test_bin16)):
+#         for j in range(len(num_test_bin16)):
+#             result_16bits = operando(num_test_bin16[i],num_test_bin16[j])
+#             print("{}, {} = {}".format(num_test[0][i], num_test[0][j], result_16bits))
+# mul = lambda a, b : a*b
+# div = lambda a, b : a/b
+# equ = lambda a, b : a==b
+# no_equ = lambda a, b : a!=b
+#test_operacion(num_test_bin16, mul)
+#test_operacion(num_test_bin16, div)
+#test_operacion(num_test_bin16, equ)
+#test_operacion(num_test_bin16, no_equ)

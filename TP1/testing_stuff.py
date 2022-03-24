@@ -2,20 +2,55 @@ print("Oh Yeah Mr. Krabs")
 
 import struct
 import binascii
+from floating_ieee754 import binary16
+import numpy as np
 
-print(binascii.hexlify(struct.pack('<d',+0)))
+# print(binascii.hexlify(struct.pack('<d',+0)))
 
-print(binascii.hexlify(struct.pack('<d',float('inf'))))
+# print(binascii.hexlify(struct.pack('<d',float('inf'))))
 
-print(binascii.hexlify(struct.pack('<d',float('-inf'))))
+# print(binascii.hexlify(struct.pack('<d',float('-inf'))))
 
-print(binascii.hexlify(struct.pack('<d',float('nan'))))
+# print(binascii.hexlify(struct.pack('<d',float('nan'))))
 
-print(binascii.hexlify(struct.pack('<d',+0)))
+# print(binascii.hexlify(struct.pack('<d',+0)))
 
-print(binascii.hexlify(struct.pack('<d',+0.0)))
+# print(binascii.hexlify(struct.pack('<d',+0.0)))
 
-print(binascii.hexlify(struct.pack('<d',-0.0)))
+# print(binascii.hexlify(struct.pack('<d',-0.0)))
+
+a = 5.984634
+b = 2.434947
+a_16 = np.float16(a)
+b_16 = np.float16(b)
+
+pepe = binary16(a)
+papa = binary16(b)
+
+
+
+# def bool2num(bits):
+#     num = []
+#     for i in range(len(bits)):
+#         if bits[i]==False:
+#             num.append(0)
+#         else:
+#             num.append(1)
+#     return num
+
+# print(bool2num(pepe.bits))
+# print(pepe.bits)
+# print(papa.bits)
+
+# print((pepe*papa).d)
+# print(a_16*b_16)
+# print(np.half(a*b))
+
+x = binary16(0.0)
+y = binary16(-0.0)
+
+print(x.bits)
+print(y.bits)
 
 """
 TESTING
