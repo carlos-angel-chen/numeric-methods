@@ -1,0 +1,106 @@
+% Template:     Informe LaTeX
+% Documento:    Archivo principal
+% Versión:      7.0.3 (02/08/2020)
+% Codificación: UTF-8
+%
+% Autor: Pablo Pizarro R.
+%        Facultad de Ciencias Físicas y Matemáticas
+%        Universidad de Chile
+%        pablo@ppizarror.com
+%
+% Manual template: [https://latex.ppizarror.com/informe]
+% Licencia MIT:    [https://opensource.org/licenses/MIT]
+
+% CREACIÓN DEL DOCUMENTO
+\documentclass[letterpaper,oneside]{article}
+
+% INFORMACIÓN DEL DOCUMENTO
+\def\titulodelinforme {Trabajo práctico N°1}
+\def\temaatratar {\LARGE Punto Flotante}
+
+\def\autordeldocumento {Grupo 11}
+\def\nombredelcurso {Métodos Numéricos}
+\def\codigodelcurso {93.54}
+
+\def\nombreuniversidad {\large 93.54  - Métodos Numéricos}
+\def\nombrefacultad {}
+\def\departamentouniversidad {}
+\def\imagendepartamento {ITBA}
+\def\imagendepartamentoescala {0.15}
+\def\localizacionuniversidad {Buenos Aires, Argentina}
+
+% INTEGRANTES, PROFESORES Y FECHAS
+\def\tablaintegrantes {
+\begin{tabular}{ll}
+	Grupo 11:
+	& \begin{tabular}[t]{l}
+		Martin Amagliani \\
+		Olivia De Vincenti \\
+		Nicolás Fernandez Pelayo
+	\end{tabular} \\
+	\\
+	Profesor:
+	& \begin{tabular}[t]{l}
+		Pablo Ignacio Fierens
+	\end{tabular} \\
+%	Auxiliar:
+%	& \begin{tabular}[t]{l}
+%		Auxiliar 1
+%	\end{tabular} \\
+%	Ayudantes:
+%	& \begin{tabular}[t]{l}
+%		Ayudante 1 \\
+%		Ayudante 2
+%	\end{tabular} \\
+%	\multicolumn{2}{l}{Ayudante de laboratorio: Ayudante 1} \\
+	& \\
+%	\multicolumn{2}{l}{Fecha de realización: \today} \\
+	\multicolumn{2}{l}{Fecha de entrega: \today} \\
+	\\
+	\multicolumn{2}{l}{\localizacionuniversidad}
+\end{tabular}}{
+}
+
+% IMPORTACIÓN DEL TEMPLATE
+\input{template}
+
+% INICIO DE PÁGINAS
+\begin{document}
+	
+% PORTADA
+\templatePortrait
+
+% CONFIGURACIÓN DE PÁGINA Y ENCABEZADOS
+\templatePagecfg
+
+%% RESUMEN O ABSTRACT
+%\begin{resumen}
+%	\lipsum[1] % Párrafo ejemplo, se puede borrar
+%\end{resumen}
+
+\sectionanumnoi{Consigna}
+
+	\subsectionanumnoi{Grupo impar}
+	
+1. Escriba una función que convierta un número binario punto flotante IEEE
+754 de 16 bits a un número en notación decimal. El nombre de la función
+debe ser binf2dec, recibir como parámetro solamente un arreglo de Numpy,
+16 × 1, de 1s y 0s y devolver el número correspondiente. La función debe
+estar dentro de un archivo de nombre bin2dec.py.
+
+
+2. Escriba una función que pruebe el correcto funcionamiento de la implementada en el ítem anterior. La función debe llamarse test, sin argumentos, y se la debe colocar en el mismo archivo que la anterior.
+
+
+% TABLA DE CONTENIDOS - ÍNDICE
+\templateIndex
+
+% CONFIGURACIONES FINALES
+\templateFinalcfg
+
+% ======================= INICIO DEL DOCUMENTO =======================
+
+\input{informe}
+
+% FIN DEL DOCUMENTO
+\end{document}
