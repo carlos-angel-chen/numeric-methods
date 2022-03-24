@@ -210,45 +210,46 @@ class binary16:
 #       no_equ_verification[]                                                                               #
 #############################################################################################################
 
-#Todos los numeros para usar en el testeo
-num_test = [
-            ["float", "sub-float", "0", "-0", "inf", "-inf", "nan"],
-            [5.984634, 0.345788, 0.0, -0.0, float('inf'), float('-inf'), float('nan')]
-            ]
-
-mul_verification = [35.8125, 2.068359375, 0.0, -0.0, float('inf'), float('-inf'), float('nan'), 
-                        0.1195068359375, 0.0, -0.0, float('inf'), float('-inf'), float('nan'),
-                            0.0, -0.0, float('nan'), float('nan'), float('nan'), 
-                                0.0, float('nan'), float('nan'), float('nan'),
-                                    float('inf'), float('-inf'), float('nan'),
-                                        float('inf'), float('nan'), 
-                                            float('nan')]
-
-div_verification = [1.0,17.296875,float('inf'),float('-inf'),0.0,-0.0,float('nan'),
-                    0.0577392578125,1.0,float('inf'),float('-inf'),0.0,-0.0,float('nan'),
-                    0.0,0.0,float('nan'),float('nan'),0.0,-0.0,float('nan'),
-                    -0.0,-0.0,float('nan'),float('nan'),-0.0,0.0,float('nan'),
-                    float('inf'),float('inf'),float('inf'),float('-inf'),float('nan'),float('nan'),float('nan'),
-                    float('-inf'),float('-inf'),float('-inf'),float('inf'),float('nan'),float('nan'),float('nan'),
-                    float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan')]
-
-equ_verification = [True,False,False,False,False,False,False,
-                        True,False,False,False,False,False,
-                            True,False,False,False,False,
-                                True,False,False,False,
-                                    True,False,False,
-                                        True,False,
-                                            True]
-
-no_equ_verification = [False,True,True,True,True,True,True,
-                            False,True,True,True,True,True,
-                                False,True,True,True,True,
-                                    False,True,True,True,
-                                        False,True,True,
-                                            False,True,
-                                                False]
 
 def test():
+    #Todos los numeros para usar en el testeo
+    num_test = [
+                ["float", "sub-float", "0", "-0", "inf", "-inf", "nan"],
+                [5.984634, 0.345788, 0.0, -0.0, float('inf'), float('-inf'), float('nan')]
+                ]
+
+    mul_verification = [35.8125, 2.068359375, 0.0, -0.0, float('inf'), float('-inf'), float('nan'), 
+                            0.1195068359375, 0.0, -0.0, float('inf'), float('-inf'), float('nan'),
+                                0.0, -0.0, float('nan'), float('nan'), float('nan'), 
+                                    0.0, float('nan'), float('nan'), float('nan'),
+                                        float('inf'), float('-inf'), float('nan'),
+                                            float('inf'), float('nan'), 
+                                                float('nan')]
+
+    div_verification = [1.0,17.296875,float('inf'),float('-inf'),0.0,-0.0,float('nan'),
+                        0.0577392578125,1.0,float('inf'),float('-inf'),0.0,-0.0,float('nan'),
+                        0.0,0.0,float('nan'),float('nan'),0.0,-0.0,float('nan'),
+                        -0.0,-0.0,float('nan'),float('nan'),-0.0,0.0,float('nan'),
+                        float('inf'),float('inf'),float('inf'),float('-inf'),float('nan'),float('nan'),float('nan'),
+                        float('-inf'),float('-inf'),float('-inf'),float('inf'),float('nan'),float('nan'),float('nan'),
+                        float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan')]
+
+    equ_verification = [True,False,False,False,False,False,False,
+                            True,False,False,False,False,False,
+                                True,False,False,False,False,
+                                    True,False,False,False,
+                                        True,False,False,
+                                            True,False,
+                                                True]
+
+    no_equ_verification = [False,True,True,True,True,True,True,
+                                False,True,True,True,True,True,
+                                    False,True,True,True,True,
+                                        False,True,True,True,
+                                            False,True,True,
+                                                False,True,
+                                                    False]
+
     #Tomo los numeros de test y lo paso a 16 bits
     num_test_bin16 = []
     for i in range(len(num_test[1])):
