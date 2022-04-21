@@ -1,18 +1,62 @@
 import numpy as np
 import pandas as pd
 
+from math import sqrt
+
+def thinQRFactorization(A): #en Q1 y R1
+    print("QR FACTORIZATION")
+    (m,n) = A.shape
+    Q1 = np.zeros((m,n))
+    R1 = np.zeros((n,n))
+
+    for k in range(n):
+        R1[k,k] = np.linalg.norm(A[:,k])#sqrt(A[:,k].T@A[:,k])
+        Q1[:,k] = A[:,k]/R1[k,k]
+        for j in range(k+1,n):
+            R1[k,j] = Q1[:,k].T@A[:,j]
+            A[:,j] = A[:,j] - Q1[:,k]*R1[k,j]
+            #print(Q1[:,k]*R1[k,j])
+
+        #print("LOL")
+        #print(A)
+        #print("LOL")
+
+    return Q1,R1
+
 def leastsq(A,b):
+    q,r = np.linalg.qr(A, mode = 'reduced')
+    print(A)
+    print("")
+    print("")
+    print(q)
+    print("")
+    print(r)
+    print("")
+    print(q@r)
+    print("")
+    print("")
+
+    q,r = thinQRFactorization(A)
+    print(q)
+    print("")
+    print(r)
+    print("")
+    print(q@r)
+
     print("HOLA")
 
 def gramSchmidt(A):
     print("ADIOS")
 
-a = np.array([[1,2],[3,4]])
-b = np.array([[5,6],[7,8]])
-print(a*b)
+A = np.array([[-1,-1,2],[1,0,77],[-1,1,5]])
+b = np.array([7,6,4]).T
+leastsq(A,b)
+# a = np.array([[1,2],[3,4]])
+# b = np.array([[5,6],[7,8]])
+# print(a*b)
 
-def thinQRFactorization(A): #en Q1 y R1
-    print("QR FACTORIZATION")
+
+
 
 def solveTriangular(A,b): # A = R1, b = Q1'*b
     print("solve triangular")
