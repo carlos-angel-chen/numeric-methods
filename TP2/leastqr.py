@@ -4,22 +4,42 @@ import pandas as pd
 from math import sqrt
 
 def thinQRFactorization(A): #en Q1 y R1
+    aux = A
     print("QR FACTORIZATION")
     (m,n) = A.shape
+
+    print("m = ")
+    print(m)
+    print("n = ")
+    print(n)
     Q1 = np.zeros((m,n))
     R1 = np.zeros((n,n))
 
-    for k in range(n):
-        R1[k,k] = np.linalg.norm(A[:,k])#sqrt(A[:,k].T@A[:,k])
-        Q1[:,k] = A[:,k]/R1[k,k]
-        for j in range(k+1,n):
-            R1[k,j] = Q1[:,k].T@A[:,j]
-            A[:,j] = A[:,j] - Q1[:,k]*R1[k,j]
-            #print(Q1[:,k]*R1[k,j])
+    # for k in range(n):
+        # Q1[:,k] = aux[:,k]/np.linalg.norm(aux[:,k])
+        # R1[k,k] = Q1[:,k].T@A[:,k]#sqrt(A[:,k].T@A[:,k])
+        # for j in range(k+1,n):
+        #     R1[k,j] = Q1[:,k].T@A[:,j]
+        #     aux[:,j] = aux[:,j] - Q1[:,k]*(Q1[:,k].T@aux[:,j])   
 
-        #print("LOL")
-        #print(A)
-        #print("LOL")
+    for k in range(n):
+        
+        Q1[:,k] = A[:,k]
+        for j in range(k):
+            Q1[:,k] = Q1[:,k] - (Q1[:,j]@A[:,k])*Q1[:,j]
+        Q1[:,k] = Q1[:,k] / sqrt(Q1[:,k].T@Q1[:,k])
+        for j in range(k,n):
+            R1[k,j] = Q1[:,k].T@A[:,j]
+
+    # for k in range(n):
+    #     Q1[:,k] = A[:,k]
+    #     for j in range(k):
+    #         Q1[:,k] = Q1[:,k] - Q1[:,k]
+    #
+    #
+    #
+    #
+
 
     return Q1,R1
 
@@ -36,6 +56,10 @@ def leastsq(A,b):
     print("")
     print("")
 
+    print(q[:,0].T@q[:,1])
+    print(q[:,0].T@q[:,2])
+    print(q[:,2].T@q[:,1])
+
     q,r = thinQRFactorization(A)
     print(q)
     print("")
@@ -43,12 +67,19 @@ def leastsq(A,b):
     print("")
     print(q@r)
 
+    print(q[:,0].T@q[:,1])
+    print(q[:,0].T@q[:,2])
+    print(q[:,2].T@q[:,1])
+    print(q[:,0].T@q[:,0])
+    print(q[:,2].T@q[:,2])
+    print(q[:,1].T@q[:,1])
+
     print("HOLA")
 
 def gramSchmidt(A):
     print("ADIOS")
 
-A = np.array([[-1,-1,2],[1,0,77],[-1,1,5]])
+A = np.array(np.longlong([[-1,-1,2],[1,0,77],[-1,1,5],[5,23,5]]))
 b = np.array([7,6,4]).T
 leastsq(A,b)
 # a = np.array([[1,2],[3,4]])
