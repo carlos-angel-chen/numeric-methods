@@ -3,81 +3,75 @@ import pandas as pd
 
 from math import sqrt
 
-def thinQRFactorization(A): #en Q1 y R1
-    (m,n) = A.shape
-    Q1 = np.zeros((m,n))
+# Función thinQRFactorization
+# Recibe: matriz no singular de dimensiones mxn, con m>=n
+# Devuelve: matrices Q1 y R1, correspondientes a la factorización QR reducida de la matriz de entrada
+def thinQRFactorization(A):
+    (m,n) = A.shape      # Se obtienen las dimensiones de la matriz de entrada...
+    Q1 = np.zeros((m,n)) # ...para definir las matrices Q1 y R1, inicialmente en 0
     R1 = np.zeros((n,n))
-    for k in range(n):
-        Q1[:,k] = A[:,k]
-        for j in range(k):
-            Q1[:,k] = Q1[:,k] - (Q1[:,j]@A[:,k])*Q1[:,j]
-        Q1[:,k] = Q1[:,k] / sqrt(Q1[:,k].T@Q1[:,k])
-        for j in range(k,n):
-            R1[k,j] = Q1[:,k].T@A[:,j]
+
+    # Metodo Gram-Schmidt (tradicional)
+    for k in range(n):      # Por cada columna de Q1...
+        Q1[:,k] = A[:,k]    # se extrae una nueva columna de A
+        for j in range(k):  # y por cada una de las columnas anteriores de Q1 (ahora versores) ...
+            Q1[:,k] = Q1[:,k] - (Q1[:,j]@A[:,k])*Q1[:,j] # ... se le resta la proyección de la nueva columna en cada versor
+        Q1[:,k] = Q1[:,k] / sqrt(Q1[:,k].T@Q1[:,k]) # Se normaliza la nueva columna
+        for j in range(k,n): # Por cada una de las siguientes columnas
+            R1[k,j] = Q1[:,k].T@A[:,j] # Se calcula el valore de R1
     return Q1,R1
 
-# Q1' = nxm
-# b = mx1
-def solveTriangular(A,b): # A = R1, b = Q1'*b
-    n = A.shape[0]
-    x = np.zeros((n,1))
-    for k in range(n):
-        row = n-1-k 
-        x[row,0] = b[row,0]
-        for j in range(row+1,n):
-            x[row,0] -= A[row,j]*x[j,0]
-        x[row,0]/= A[row,row]
+# Función solveTriangular
+# Recibe: matriz de coeficientes A cuadrada (nxn), y vector de terminos independientes (nx1) 
+# A debe ser triangular superior
+# Devuelve: matriz (nx1) solución al sistema Ax=b
+def solveTriangular(A,b):
+    n = A.shape[0]      # Se obtiene el tamaño de A...
+    x = np.zeros((n,1)) # ...para crear la matriz resultado, inicialmente en 0
+    for k in range(n):  # Por cada fila del resultado
+        row = n-1-k     # (comenzando por la última)
+        x[row,0] = b[row,0] # Se iguala al término independiente
+        for j in range(row+1,n): # Y por cada una de las filas ya calculadas
+            x[row,0] -= A[row,j]*x[j,0] # Se sustrae su contribución con la incógnita actual
+        x[row,0]/= A[row,row] # Finalmente, se divide por el coeficiente de la incógnita actual
     return x
 
+# Función leastsq
+# Recibe: matrices de numpy A (tamaño mxn) y b (tamaño mx1) correspondientes
+# al sistema Ax = b
+# Devuelve: matriz x de tamaño nx1 que minimice la norma del error
+# e = Ax-b
 def leastsq(A,b):
     try:
         (m,n) = A.shape
         (o,p) = b.shape
-        if m < n:
+        if m < n:       # Comuncar error... Si A tiene mas columnas que filas;
             print("leastsq: ISSUE: Dimensions of A (mxn)\nm must be greater of equal than n")
             return np.array([[]])
-        elif m != o:
+        elif m != o:    #... Si A y b tienen un número distinto de filas
             print("leastsq: ISSUE: Dimensions of A (mxn) and b (nx1)\nDimensions of A and b mismatch")
             return np.array([[]])
-        elif p != 1:
+        elif p != 1:    #... o si b tiene mas (o menos) de 1 columna
             print("leastsq: ISSUE: Dimensions of b (nx1)\nb must have 1 column")
             return np.array([[]])
-        else:
-            Q1,R1 = thinQRFactorization(A)
-            x = solveTriangular(R1,Q1.T@b)
+        else: # Si las entradas son válidas
+            Q1,R1 = thinQRFactorization(A) # Se factoriza a A en Q1 y R1 (factorización QR reducida)
+            x = solveTriangular(R1,Q1.T@b) # y se resuelve el sistema de ecuaciones R1x = Q1'b
             return x
-    except:
+
+    except: # Mensaje enviado en caso de que las entradas no sean válidas 
         print("leastsq: INVALID INPUT")
         return np.array([[]])
 
 
 
-A = np.array([[-1,-1],[1,0],[-1,1]])
-b = np.array([[1,2,3]]).T
+# A = np.array([[-1,-1],[1,0],[-1,1]])
+# b = np.array([[1,2,3]]).T
 
-x = leastsq(A,b)
-print(x)
-print(A@x-b)
+# x = leastsq(A,b)
+# print(x)
+# print(A@x-b)
 
-
-# PRODUCTO Y TRANSPUESTA SE PUEDEN USAR FUNCIONES DE NUMPY, QUE LOCO
-
-# TAREAS:
-# 1) entender descomp QR -> Usar GramShmid modificado y obtener R de manera inteligente, no calculando QtA
-# 2) programar el test (usar librerias)
-# 3) emplear el leastqr para q lea y resuelva el sount.txt
-# 4) INFORME
-
-# Si es inversible : 
-#   Sistema determinado ->  Eliminacion Gaussiana (calc inversa) [ESTA NO]
-#                           LU : 
-#                           Otras q llevaban al caso triangular:
-#                               QR (no es mejor que LU pero permite matrices no cuadradas)
-#                               Valores singulares
-#                           Cholesky si es definida positiva y simetrica
-# Si no es inversible : Valores singulares
-
-# OJO: TENEMOS q implemetar QR, por lo que  
 
 
 # Funcion sound()
