@@ -8,6 +8,14 @@
 # ¿Podemos usar la función np.linalg.norm() para calcular norma de vectores?
 # Sí.
 
+# 4) Si ustedes están intentando de usar estimaciones teóricas del error relativo de los métodos numéricos, por favor, lean otras consultas sobre el tema en este mismo foro. 
+
+# 5) No imagino para qué quieren usar np.finfo().eps, pero sí pueden.
+
+# 6) pueden usar el producto de matrices y la transpuesta.
+
+#
+
 import numpy as np
 
 A = np.zeros((2,3))
