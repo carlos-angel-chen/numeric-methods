@@ -44,7 +44,7 @@ def solveTriangular(A,b): # A = R1, b = Q1'*b
 def sonido():
     df  = pd.read_csv('.\TP2\sound.txt',header=None,names=['ti','yi'],dtype={'ti':np.float64,'yi':np.float64},sep=' ')
     ti  = np.array(df['ti'].tolist())
-    b  = np.array(df['yi'].tolist())
+    b  = np.array([df['yi'].tolist()]).T
 
     A = np.zeros((441000, 6))
 
@@ -65,7 +65,6 @@ def sonido():
     error = A*xsol - b
     
     return xsol, error
-
 
 from numpy.linalg import qr
 from scipy.linalg import solve_triangular
