@@ -5,7 +5,7 @@ from scipy.linalg import solve_triangular
 
 def test():
     A = np.array([[-1, -1],[1, 0],[-1, 1]])
-    b = np.array([1, 2, 3])
+    b = np.array([[1, 2, 3]]).T
 
     Q1,R1 = qr(A,mode='reduced')
     y = Q1.T@b
