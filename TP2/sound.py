@@ -5,7 +5,7 @@ import pandas as pd
 def sonido():
     df  = pd.read_csv('.\TP2\sound.txt',header=None,names=['ti','yi'],dtype={'ti':np.float64,'yi':np.float64},sep=' ')
     ti  = np.array(df['ti'].tolist())
-    b  = np.array(df['yi'].tolist())
+    b  = np.array([df['yi'].tolist()]).T
 
     A = np.zeros((441000, 6))
 
@@ -21,5 +21,9 @@ def sonido():
             row.append(np.sin(3000*np.pi*ti[i]))
             A[i] = row
             count+=1
+
+    xsol = leastsq(A, b)
+    error = A*xsol - b
     
-    return A, b
+    return xsol, error
+sonido()
