@@ -44,3 +44,5 @@ def test():
 
     # numpy.linalg.qr sc
     # ipy.linalg.solve_triangular
+
+    #A
