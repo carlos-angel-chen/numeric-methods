@@ -40,9 +40,4 @@ from numpy.linalg import qr
 from scipy.linalg import solve_triangular
 
 def test():
-    print("LOL")
-
-    # numpy.linalg.qr sc
-    # ipy.linalg.solve_triangular
-
-    #A
+    pass
