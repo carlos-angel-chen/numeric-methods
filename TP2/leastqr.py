@@ -4,93 +4,60 @@ import pandas as pd
 from math import sqrt
 
 def thinQRFactorization(A): #en Q1 y R1
-    aux = A
-    print("QR FACTORIZATION")
     (m,n) = A.shape
-
-    print("m = ")
-    print(m)
-    print("n = ")
-    print(n)
     Q1 = np.zeros((m,n))
     R1 = np.zeros((n,n))
-
-    # for k in range(n):
-        # Q1[:,k] = aux[:,k]/np.linalg.norm(aux[:,k])
-        # R1[k,k] = Q1[:,k].T@A[:,k]#sqrt(A[:,k].T@A[:,k])
-        # for j in range(k+1,n):
-        #     R1[k,j] = Q1[:,k].T@A[:,j]
-        #     aux[:,j] = aux[:,j] - Q1[:,k]*(Q1[:,k].T@aux[:,j])   
-
     for k in range(n):
-        
         Q1[:,k] = A[:,k]
         for j in range(k):
             Q1[:,k] = Q1[:,k] - (Q1[:,j]@A[:,k])*Q1[:,j]
         Q1[:,k] = Q1[:,k] / sqrt(Q1[:,k].T@Q1[:,k])
         for j in range(k,n):
             R1[k,j] = Q1[:,k].T@A[:,j]
-
-    # for k in range(n):
-    #     Q1[:,k] = A[:,k]
-    #     for j in range(k):
-    #         Q1[:,k] = Q1[:,k] - Q1[:,k]
-    #
-    #
-    #
-    #
-
-
     return Q1,R1
 
-def leastsq(A,b):
-    q,r = np.linalg.qr(A, mode = 'reduced')
-    print(A)
-    print("")
-    print("")
-    print(q)
-    print("")
-    print(r)
-    print("")
-    print(q@r)
-    print("")
-    print("")
-
-    print(q[:,0].T@q[:,1])
-    print(q[:,0].T@q[:,2])
-    print(q[:,2].T@q[:,1])
-
-    q,r = thinQRFactorization(A)
-    print(q)
-    print("")
-    print(r)
-    print("")
-    print(q@r)
-
-    print(q[:,0].T@q[:,1])
-    print(q[:,0].T@q[:,2])
-    print(q[:,2].T@q[:,1])
-    print(q[:,0].T@q[:,0])
-    print(q[:,2].T@q[:,2])
-    print(q[:,1].T@q[:,1])
-
-    print("HOLA")
-
-def gramSchmidt(A):
-    print("ADIOS")
-
-A = np.array(np.longlong([[-1,-1,2],[1,0,77],[-1,1,5],[5,23,5]]))
-b = np.array([7,6,4]).T
-leastsq(A,b)
-# a = np.array([[1,2],[3,4]])
-# b = np.array([[5,6],[7,8]])
-# print(a*b)
-
-
-
-
+# Q1' = nxm
+# b = mx1
 def solveTriangular(A,b): # A = R1, b = Q1'*b
-    print("solve triangular")
+    n = A.shape[0]
+    x = np.zeros((n,1))
+    for k in range(n):
+        row = n-1-k 
+        x[row,0] = b[row,0]
+        for j in range(row+1,n):
+            x[row,0] -= A[row,j]*x[j,0]
+        x[row,0]/= A[row,row]
+    return x
+
+def leastsq(A,b):
+    try:
+        (m,n) = A.shape
+        (o,p) = b.shape
+        if m < n:
+            print("leastsq: ISSUE: Dimensions of A (mxn)\nm must be greater of equal than n")
+            return np.array([[]])
+        elif m != o:
+            print("leastsq: ISSUE: Dimensions of A (mxn) and b (nx1)\nDimensions of A and b mismatch")
+            return np.array([[]])
+        elif p != 1:
+            print("leastsq: ISSUE: Dimensions of b (nx1)\nb must have 1 column")
+            return np.array([[]])
+        else:
+            Q1,R1 = thinQRFactorization(A)
+            x = solveTriangular(R1,Q1.T@b)
+            return x
+    except:
+        print("leastsq: INVALID INPUT")
+        return np.array([[]])
+
+
+
+A = np.array([[-1,-1],[1,0],[-1,1]])
+b = np.array([[1,2,3]]).T
+
+x = leastsq(A,b)
+print(x)
+print(A@x-b)
 
 
 # PRODUCTO Y TRANSPUESTA SE PUEDEN USAR FUNCIONES DE NUMPY, QUE LOCO
