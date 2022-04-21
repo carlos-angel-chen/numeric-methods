@@ -60,8 +60,11 @@ def sonido():
             row.append(np.sin(3000*np.pi*ti[i]))
             A[i] = row
             count+=1
+
+    xsol = leastsq(A, b)
+    error = A*xsol - b
     
-    return A, b
+    return xsol, error
 
 
 from numpy.linalg import qr
