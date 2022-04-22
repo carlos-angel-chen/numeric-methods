@@ -85,7 +85,7 @@ import pandas as pd
 #   Hace llamado a la funcion leastsq(A,b) y les envia la matriz A y b
 #   Devuelve la xsol y el error
 def sonido():
-    df  = pd.read_csv('.\TP2\sound.txt',header=None,names=['ti','yi'],dtype={'ti':np.float64,'yi':np.float64},sep=' ')
+    df  = pd.read_csv('sound.txt',header=None,names=['ti','yi'],dtype={'ti':np.float64,'yi':np.float64},sep=' ')
     ti  = np.array(df['ti'].tolist())
     b  = np.array([df['yi'].tolist()]).T
 
