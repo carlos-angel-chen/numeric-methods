@@ -105,7 +105,7 @@ def sonido():
             count+=1
 
     xsol = leastsq(A, b)
-    error = A*xsol - b
+    error = np.matmul(A,xsol) - b
     
     return xsol, error
 
