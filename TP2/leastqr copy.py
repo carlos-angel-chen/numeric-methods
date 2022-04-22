@@ -19,6 +19,44 @@ def thinQRFactorization(A):
         Q1[:,k] = Q1[:,k] / sqrt(Q1[:,k].T@Q1[:,k]) # Se normaliza la nueva columna
         for j in range(k,n): # Por cada una de las siguientes columnas
             R1[k,j] = Q1[:,k].T@A[:,j] # Se calcula el valore de R1
+    
+    print("Q1 : ")
+    print(Q1)
+    print(Q1.T@Q1)
+    print("R1 : ")
+    print(R1)
+    print("A")
+    print(A)
+    print(A-Q1@R1)
+    
+    return Q1,R1
+
+def thinQRFactorization2(A_in):
+    A = np.array(A_in)
+    (m,n) = A.shape
+    Q1 = np.zeros((m,n))
+    R1 = np.zeros((n,n))
+
+
+    Q1[:,1] = A[:,1]
+    R1[1,1] = 1
+
+    for k in range(n):
+        R1[k,k] = np.linalg.norm(A[:,k])
+        Q1[:,k] = A[:,k] / R1[k,k]
+        for j in range(k+1,n):
+            R1[k,j] = Q1[:,k].T@A[:,j]
+            A[:,j] = A[:,j] - Q1[:,k]*R1[k,j]
+
+
+    print("Q1 : ")
+    print(Q1)
+    print(Q1.T@Q1)
+    print("R1 : ")
+    print(R1)
+    print("A")
+    print(A)
+    print(A-Q1@R1)
     return Q1,R1
 
 # Función solveTriangular
@@ -55,13 +93,26 @@ def leastsq(A,b):
             print("leastsq: ISSUE: Dimensions of b (nx1)\nb must have 1 column")
             return np.array([[]])
         else: # Si las entradas son válidas
-            Q1,R1 = thinQRFactorization(A) # Se factoriza a A en Q1 y R1 (factorización QR reducida)
+            Q1,R1 = thinQRFactorization2(A) # Se factoriza a A en Q1 y R1 (factorización QR reducida)
             x = solveTriangular(R1,Q1.T@b) # y se resuelve el sistema de ecuaciones R1x = Q1'b
             return x
 
     except: # Mensaje enviado en caso de que las entradas no sean válidas 
         print("leastsq: INVALID INPUT")
         return np.array([[]])
+
+
+#A = np.array([[-1,-1],[1,0],[-1,1]])
+#b = np.array([[1,2,3]]).T
+
+A = np.array(np.longdouble([[-1.,-1.,2.,3.],[1.,0.,77.,326.],[-1.,1.,5.,9.],[5.,23.,5.,171.]]))
+b = np.array(np.longdouble([[7.,6.,4.,17.]])).T
+
+x = leastsq(A,b)
+print(x)
+print(A@x-b)
+
+
 
 # Funcion sound()
 #   toma los datos del archivo sound.txt y los evalua en las funciones con y sin
@@ -90,3 +141,9 @@ def sonido():
     error = A*xsol - b
     
     return xsol, error
+
+from numpy.linalg import qr
+from scipy.linalg import solve_triangular
+
+def test():
+    pass
