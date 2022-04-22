@@ -63,9 +63,11 @@ def leastsq(A,b):
         print("leastsq: INVALID INPUT")
         return np.array([[]])
 
-# Funcion sound()
-#   toma los datos del archivo sound.txt y los evalua en las funciones con y sin
-#   devuelve la matriz A y el vector b
+# Funcion sounido()
+#   Toma los datos del archivo sound.txt y los evalua en las funciones coseno y seno,
+#   obteniendo asi la matriz A y b
+#   Hace llamado a la funcion leastsq(A,b) y les envia la matriz A y b
+#   Devuelve la xsol y el error
 def sonido():
     df  = pd.read_csv('.\TP2\sound.txt',header=None,names=['ti','yi'],dtype={'ti':np.float64,'yi':np.float64},sep=' ')
     ti  = np.array(df['ti'].tolist())
