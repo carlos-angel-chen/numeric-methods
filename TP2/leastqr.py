@@ -1,6 +1,4 @@
 import numpy as np
-import pandas as pd
-
 from math import sqrt
 
 # Función thinQRFactorization
@@ -63,6 +61,7 @@ def leastsq(A,b):
         print("leastsq: INVALID INPUT")
         return np.array([[]])
 
+import pandas as pd
 # Funcion sounido()
 #   Toma los datos del archivo sound.txt y los evalua en las funciones coseno y seno,
 #   obteniendo asi la matriz A y b
