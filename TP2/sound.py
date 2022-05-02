@@ -1,5 +1,9 @@
 import numpy as np
 import pandas as pd
+import leastqr as lqr
+
+from numpy.linalg import qr
+from scipy.linalg import solve_triangular
 
 
 def sonido():
@@ -22,8 +26,17 @@ def sonido():
             A[i] = row
             count+=1
 
-    xsol = leastsq(A, b)
-    error = A*xsol - b
-    
+    xsol = lqr.leastsq(A, b)
+    error = np.matmul(A,xsol) - b
+
+    # Q1,R1 = qr(A,mode='reduced')
+    # y = Q1.T@b
+    # xsol_lib = solve_triangular(R1,y,lower=False)
+    # error_lib = np.matmul(A,xsol_lib) - b
+
     return xsol, error
-sonido()
+
+x, x_error = sonido()
+
+
+
