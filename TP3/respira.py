@@ -1,14 +1,6 @@
 import math
 import numpy as np
 
-
-def fx(y, alfa, beta, gamma):
-    yexp2 = y**2
-    return yexp2 * np.log(yexp2) - yexp2 + 1 - alpha + beta * (yexp2 - 1) * z + gamma * (yexp2 - 1)
-
-def dfx(x):
-    pass
-
 def solvercrit(z):
     Dt = 8e-6
     v = 0.005
@@ -26,8 +18,9 @@ def solvercrit(z):
 
     eps = 10e-6  #cota 
 
-    fx = y**2 * np.log(y**2) - y**2 + 1 - alpha + beta * (y**2 - 1) * z + gamma * (y**2 - 1)
-    dfx = 2*y*(beta*z + gamma + np.log(y**2))
+    yexp2 = y**2
+    fx = yexp2 * np.log(yexp2) - yexp2 + 1 - alpha + beta * (yexp2 - 1) * z + gamma * (yexp2 - 1)
+    dfx = 2*y*(beta*z + gamma + np.log(yexp2))
 
     print(fx)
     print(dfx)
@@ -40,8 +33,9 @@ def solvercrit(z):
     while(np.abs(y1 - y) > eps):
         
         y = y1
-        fx = y**2 * np.log(y**2) - y**2 + 1 - alpha + beta * (y**2 - 1) * z + gamma * (y**2 - 1)
-        dfx = 2*y*(beta*z + gamma + np.log(y**2))
+        yexp2 = y**2
+        fx = yexp2 * np.log(yexp2) - yexp2 + 1 - alpha + beta * (yexp2 - 1) * z + gamma * (yexp2 - 1)
+        dfx = 2*y*(beta*z + gamma + np.log(yexp2))
         y1 = y - fx/dfx
 
     print(y1)
