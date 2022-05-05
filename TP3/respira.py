@@ -14,7 +14,7 @@ def solvercrit(z):
     beta = (4*Dt) / (v*(rc**2))
     gamma = (2 * Dt) / (rc * k0)
 
-    y = 7       #punto inicial
+    y = 1       #punto inicial
 
     eps = 10e-6  #cota 
 
@@ -30,16 +30,20 @@ def solvercrit(z):
 
     print(np.abs(y1 - y))
 
+    n = 0
+
     while(np.abs(y1 - y) > eps):
-        
+        n += 1
         y = y1
         yexp2 = y**2
         fx = yexp2 * np.log(yexp2) - yexp2 + 1 - alpha + beta * (yexp2 - 1) * z + gamma * (yexp2 - 1)
         dfx = 2*y*(beta*z + gamma + np.log(yexp2))
         y1 = y - fx/dfx
 
+    print("n")
+    print(n)
     print(y1)
     rcrit = y1 * (rc + tm)
     return rcrit
 
-print(solvercrit(0))
+print(solvercrit(0.1))
