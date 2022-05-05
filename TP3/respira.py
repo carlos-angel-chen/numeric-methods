@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import matplotlib.pyplot as plt
 
 def solvercrit(z):
     Dt = 8e-6
@@ -16,34 +17,40 @@ def solvercrit(z):
 
     y = 1       #punto inicial
 
-    eps = 10e-6  #cota 
+    eps = 10e-9  #cota 
 
     yexp2 = y**2
     fx = yexp2 * np.log(yexp2) - yexp2 + 1 - alpha + beta * (yexp2 - 1) * z + gamma * (yexp2 - 1)
     dfx = 2*y*(beta*z + gamma + np.log(yexp2))
 
-    print(fx)
-    print(dfx)
-
     y1 = y - fx/dfx
-    print(y1)
-
-    print(np.abs(y1 - y))
-
     n = 0
 
-    while(np.abs(y1 - y) > eps):
-        n += 1
+    while(np.abs(y1 - y) > eps or fx > eps):
+        n += 1      #
         y = y1
         yexp2 = y**2
         fx = yexp2 * np.log(yexp2) - yexp2 + 1 - alpha + beta * (yexp2 - 1) * z + gamma * (yexp2 - 1)
         dfx = 2*y*(beta*z + gamma + np.log(yexp2))
         y1 = y - fx/dfx
 
-    print("n")
-    print(n)
-    print(y1)
     rcrit = y1 * (rc + tm)
-    return rcrit
+    return rcrit    
 
-print(solvercrit(0.1))
+def rcritplot():
+    z = np.linspace(0,0.1,1001)
+    rcrit = np.empty(len(z))
+    for i in range(len(z)):
+       rcrit[i] = solvercrit(z[i])
+    print(z[1]-z[0])
+
+    plt.title('rcrit(z)')
+    plt.xlabel('z')
+    plt.ylabel('rcrit')
+    plt.grid(color='b', ls = '-.', lw = 0.25)
+    plt.plot(z, rcrit)
+
+    plt.show()
+    
+
+rcritplot()
