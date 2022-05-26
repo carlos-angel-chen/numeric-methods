@@ -26,3 +26,21 @@ def ruku4(f,t0,tf,h,x0):
 
     x = x.T
     return t,x
+
+from numpy import pi,cos,exp,sin
+import matplotlib.pyplot as plt
+
+R = 1e3	            #Valor de la resistencia	
+C = 1e-6	        #Valor de la capacidad
+w = 2.0*pi*1000     #frecuencia angular de la señal de entrada
+A = 1.0		        #amplitud de la señal de entrada
+T = 5*2*pi/w	    #simulo cinco ciclos
+def xsol(t):
+    x = -exp(-t/(R*C))+cos(w*t)+w*R*C*sin(w*t)
+    x = (A/(1+(w*R*C)**2))*x
+    return x
+def dx(t,x):
+    return ((A*cos(w*t)-x)/(R*C))
+
+x0 = np.zeros(1)
+
