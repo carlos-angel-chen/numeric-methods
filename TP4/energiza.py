@@ -44,3 +44,9 @@ def ruku4(f,t0,tf,h,x0):
 
 # x0 = np.zeros(1)
 
+# t4,x4 = ruku4(dx,0,T,0.0001,x0)
+# t = linspace(0,T,int(10e5))
+# x = xsol(t)
+
+# plt.plot(t,x,t4,x4)
+# plt.show()
