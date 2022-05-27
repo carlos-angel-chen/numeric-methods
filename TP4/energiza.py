@@ -128,6 +128,12 @@ def calcVc():
             v0 -= delta 
     return vc
 
+#Función:   test:
+#           En la funcion test() utiliza las funciones ruku4() y higginsselkov()
+#           de los ejercicios anteriores. Para compararlos con la funcion solve_ivp()
+#           de la libreria scipy, usando el metodo RK45.
+#Recibe:    nada
+#Devuelve:  4 graficos de comparacion
 def test():
     ######################################################
     # Comparacion entre solve_ivp() y la funcion ruku4() #
