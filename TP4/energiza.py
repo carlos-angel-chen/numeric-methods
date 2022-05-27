@@ -43,28 +43,31 @@ def ruku4(f,t0,tf,h,x0):
 
 v0 = 0.48
 #Función:   higginsselkov:
-#           
+#           emplea la función ruku4 para resolver el modelo de glucólisis de
+#           Higgins-Selkov. Grafica el resultado para 3 valores de v0:
+#           v0=vc, v0<vc y v0>vc, donde vc es el valor a partir del cual
+#           s y p dejan de oscilar
 #Recibe:    nada
 #Devuelve:  nada
 def higginsselkov():
     t0 = 0
-    tf = 600                                              
-    h = 0.01                                                
+    tf = 600
+    h = 0.01
     x0 = np.array([2,3])      #s0,p0
     global v0
     v0 = vc = calcVc()
 
-    t, result = ruku4(dx, t0, tf, h, x0)   
+    t, result = ruku4(dx, t0, tf, h, x0)
     result = result.T
     plot(t, result[0], result[1], "Higgins-Selkov model with v0 = vc")
 
-    v0 = 0.48
-    t, result = ruku4(dx, t0, tf, h, x0)   
+    v0 = vc - 0.01
+    t, result = ruku4(dx, t0, tf, h, x0)
     result = result.T
     plot(t, result[0], result[1], "Higgins-Selkov model with v0 < vc")
 
-    v0 = 0.6
-    t, result = ruku4(dx, t0, tf, h, x0)   
+    v0 = vc + 0.01
+    t, result = ruku4(dx, t0, tf, h, x0)
     result = result.T
     plot(t, result[0], result[1], "Higgins-Selkov model with v0 > vc")
 
