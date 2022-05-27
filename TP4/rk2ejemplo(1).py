@@ -205,8 +205,9 @@ def comp45(h):
     print(s45.t.shape)
     print(t.shape)
 
-# plotejemplo(T/10000)
-# plt.close('all')
+plotejemplo(T/10000)
+input()
+#plt.close('all')
 # errorejemplo()
 # esterrorejemplo(T/1e4)
-comp45(T/10000)
+# comp45(T/10000)
