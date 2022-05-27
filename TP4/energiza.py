@@ -3,6 +3,18 @@ from numpy import linspace
 from math import ceil
 import matplotlib.pyplot as plt
 
+
+#Función:   ruku4
+#           Resuelve de forma aproximada el sistema de ecuaciones diferenciales:
+#               dx/dt = f(t,x)  t>t0
+#               x(t0)=x0
+#           Emplea el método de Runge-Kutta 4
+#Recibe:    f:     handle a la funcion f = dx/dt
+#           t0,tf: tiempo inicial y final
+#           h:     paso de integración
+#           x0:    condición inicial
+#Devuelve:  t:     arreglo con los instantes de tiempo
+#           x:     aproximaciones numéricas a x (una fila por instante de tiempo)
 def ruku4(f,t0,tf,h,x0):
     n = x0.shape[0] # número de componentes de x
     if h <= 0:      # si el paso de integración no es positivo, informa el error
@@ -30,7 +42,10 @@ def ruku4(f,t0,tf,h,x0):
 
 
 v0 = 0.48
-
+#Función:   higginsselkov:
+#           
+#Recibe:    nada
+#Devuelve:  nada
 def higginsselkov():
     t0 = 0
     tf = 600                                              
