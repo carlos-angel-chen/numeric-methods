@@ -1,6 +1,7 @@
 import numpy as np
 from numpy import linspace
 from math import ceil
+import matplotlib.pyplot as plt
 
 def ruku4(f,t0,tf,h,x0):
     n = x0.shape[0] # número de componentes de x
@@ -26,6 +27,86 @@ def ruku4(f,t0,tf,h,x0):
 
     x = x.T
     return t,x
+
+
+v0 = 0.48
+
+def higginsselkov():
+    t0 = 0
+    tf = 600                                              
+    h = 0.01                                                
+    x0 = np.array([2,3])      #s0,p0
+    global v0
+    v0 = vc = calcVc()
+
+    t, result = ruku4(dx, t0, tf, h, x0)   
+    result = result.T
+    plot(t, result[0], result[1], "Higgins-Selkov model with v0 = vc")
+
+    v0 = 0.48
+    t, result = ruku4(dx, t0, tf, h, x0)   
+    result = result.T
+    plot(t, result[0], result[1], "Higgins-Selkov model with v0 < vc")
+
+    v0 = 0.6
+    t, result = ruku4(dx, t0, tf, h, x0)   
+    result = result.T
+    plot(t, result[0], result[1], "Higgins-Selkov model with v0 > vc")
+
+
+
+def dx(t,x):
+    return np.array([v0 - 0.23 * x[0] * (x[1]**2), 0.23 * x[0] * (x[1]**2) - 0.40 * x[1]])
+
+def plot(t, s, p, title):
+    plt.subplot(2, 1, 1)
+    plt.plot(t, s)
+    plt.ylabel('s')
+    plt.title(title)
+
+    plt.subplot(2, 1, 2)
+    plt.plot(t, p)
+    plt.xlabel('t')
+    plt.ylabel('p')
+
+    plt.show()
+
+def isOsc(t0, tf, h, arr):
+    dt = (tf-t0)/h
+    eps = 0.01
+    for i in range(2):
+        min1 = min(arr[i][int(dt*2/3):int(dt*5/6)])
+        min2 = min(arr[i][int(dt*5/6):int(dt)])
+        max1 = max(arr[i][int(dt*2/3):int(dt*5/6)])
+        max2 = max(arr[i][int(dt*5/6):int(dt)])
+        if abs(min2 - min1) > eps or abs(max2 - max1) > eps:
+            return False
+    return True 
+
+
+def calcVc():
+    t0 = 0
+    tf = 600                                               
+    h = 0.01     
+    x0 = np.array([2, 3])
+    global v0
+    v0 = vc = 0.48                     
+
+    delta = 0.01
+    for i in range(10):
+        t, res = ruku4(dx, t0, tf, h, x0)  
+        res = res.T                          
+        if isOsc(t0, tf, h, res):                              
+            v0 += delta                                                
+            if v0 == vc:  
+                delta /= 2                                             
+                v0 -= delta 
+        else:                                                                
+            vc = v0
+            delta /= 2                                            
+            v0 -= delta 
+    return vc
+
 
 # from numpy import pi,cos,exp,sin
 # import matplotlib.pyplot as plt

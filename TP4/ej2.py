@@ -1,33 +1,41 @@
 import numpy as np
 from numpy import linspace
 from math import ceil
+from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 
 v0 = 0.48
 
 def higginsselkov():
     t0 = 0
-    tf = 600                                               
+    tf = 600                                              
     h = 0.01                                                
     x0 = np.array([2,3])      #s0,p0
+    global v0
     v0 = vc = calcVc()
 
-    print(v0)
     t, result = ruku4(dx, t0, tf, h, x0)   
     result = result.T
     plot(t, result[0], result[1], "Higgins-Selkov model with v0 = vc")
 
-    v0 = vc-0.01 
-    print(v0)
+    result = solve_ivp(dx, (0, tf), x0, method='RK45', max_step=0.01)
+    plot(result.t, result.y[0], result.y[1], "scipy vc")
+
+    v0 = 0.48
     t, result = ruku4(dx, t0, tf, h, x0)   
     result = result.T
     plot(t, result[0], result[1], "Higgins-Selkov model with v0 < vc")
 
-    v0 = vc+0.05 
-    print(v0)
+    result = solve_ivp(dx, (0, tf), x0, method='RK45', max_step=0.01)
+    plot(result.t, result.y[0], result.y[1], "scipy v0 < vc")
+
+    v0 = 0.6
     t, result = ruku4(dx, t0, tf, h, x0)   
     result = result.T
     plot(t, result[0], result[1], "Higgins-Selkov model with v0 > vc")
+
+    result = solve_ivp(dx, (0, tf), x0, method='RK45', max_step=0.01)
+    plot(result.t, result.y[0], result.y[1], "scipy v0 > vc")
 
 
 def dx(t,x):
@@ -50,10 +58,10 @@ def isOsc(t0, tf, h, arr):
     dt = (tf-t0)/h
     eps = 0.01
     for i in range(2):
-        min1 = min(arr[i][int(dt/2):int(dt*3/4)])
-        min2 = min(arr[i][int(dt*3/4):int(dt)])
-        max1 = max(arr[i][int(dt/2):int(dt*3/4)])
-        max2 = max(arr[i][int(dt*3/4):int(dt)])
+        min1 = min(arr[i][int(dt*2/3):int(dt*5/6)])
+        min2 = min(arr[i][int(dt*5/6):int(dt)])
+        max1 = max(arr[i][int(dt*2/3):int(dt*5/6)])
+        max2 = max(arr[i][int(dt*5/6):int(dt)])
         if abs(min2 - min1) > eps or abs(max2 - max1) > eps:
             return False
     return True 
@@ -71,14 +79,12 @@ def calcVc():
     for i in range(10):
         t, res = ruku4(dx, t0, tf, h, x0)  
         res = res.T                          
-        if isOsc(t0, tf, h, res):         
-            print("True")                          
+        if isOsc(t0, tf, h, res):                              
             v0 += delta                                                
             if v0 == vc:  
                 delta /= 2                                             
                 v0 -= delta 
-        else:   
-            print("False")                                                                
+        else:                                                                
             vc = v0
             delta /= 2                                            
             v0 -= delta 
