@@ -1,4 +1,3 @@
-from pickle import FALSE
 import numpy as np
 from numpy import linspace
 from math import ceil
@@ -32,7 +31,7 @@ def higginsselkov():
     plt.show()
 
 def dx(t,x):
-    return np.array([v0 - 0,23 * x[0] * (x[1]**2), 0,23 * x[0] * (x[1]**2) - 0,40 * x[1]])
+    return np.array([v0 - 0.23 * x[0] * (x[1]**2), 0.23 * x[0] * (x[1]**2) - 0.40 * x[1]])
 
 def isOsc(t0, tf, h, f):
     dt = (tf-t0)/h
