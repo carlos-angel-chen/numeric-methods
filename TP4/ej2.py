@@ -19,23 +19,23 @@ def higginsselkov():
     plot(t, result[0], result[1], "Higgins-Selkov model with v0 = vc")
 
     result = solve_ivp(dx, (0, tf), x0, method='RK45', max_step=0.01)
-    plot(result.t, result.y[0], result.y[1], "scipy vc")
+    plot(result.t, result.y[0], result.y[1], "Scipy vc")
 
-    v0 = 0.48
+    v0 = 0.51
     t, result = ruku4(dx, t0, tf, h, x0)   
     result = result.T
     plot(t, result[0], result[1], "Higgins-Selkov model with v0 < vc")
 
     result = solve_ivp(dx, (0, tf), x0, method='RK45', max_step=0.01)
-    plot(result.t, result.y[0], result.y[1], "scipy v0 < vc")
+    plot(result.t, result.y[0], result.y[1], "Scipy v0 < vc")
 
-    v0 = 0.6
+    v0 = 0.53
     t, result = ruku4(dx, t0, tf, h, x0)   
     result = result.T
     plot(t, result[0], result[1], "Higgins-Selkov model with v0 > vc")
 
     result = solve_ivp(dx, (0, tf), x0, method='RK45', max_step=0.01)
-    plot(result.t, result.y[0], result.y[1], "scipy v0 > vc")
+    plot(result.t, result.y[0], result.y[1], "Scipy v0 > vc")
 
 
 def dx(t,x):
