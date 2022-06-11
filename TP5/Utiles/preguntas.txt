@@ -1,0 +1,4 @@
+-no gradiente
+-puntos iniciales como?
+-como ordeno (sort(f))
+-como leo archivo (o copio a array)
