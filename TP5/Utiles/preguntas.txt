@@ -1,4 +1,6 @@
 -no gradiente
 -puntos iniciales como?
 -como ordeno (sort(f))
--como leo archivo (o copio a array)
+#-como leo archivo (o copio a array)
+
+-un arreglo con el error del ajuste (1 elem)
