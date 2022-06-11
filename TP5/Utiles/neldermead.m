@@ -6,9 +6,9 @@ function x = neldermead(func,xo,tol,iter)
 xo = xo';
 
 %dimensión del problema
-d  = size(xo,2);
+d  = size(xo,2); % Cantidad de columnas = dimension del problema
 %número de puntos originales
-n = size(xo,1);
+n = size(xo,1); % Cantidad de filas = puntos diferentes
 
 if (n ~= d+1)
     x = xo(1,:);
