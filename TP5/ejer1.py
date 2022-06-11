@@ -2,7 +2,7 @@ from scipy.optimize import minimize
 import numpy as np
 
 def minimi(func,Xo,tol,itmax):
-    return Xo[:,0],func(Xo[:,0]),itmax
+    return Xo[0,:],func(Xo[0,:]),itmax
 
 # FACU ACA TA LA COSA
 func = lambda x: (x[0]-3)**2 + (x[1]-2)**2 + 1
