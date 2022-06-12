@@ -6,16 +6,16 @@ def minimi(func,Xo,tol,itmax):
     #return Xo[0,:],func(Xo[0,:]),itmax
     return m.x,m.fun,m.nit
 # FACU ACA TA LA COSA
-func = lambda x: (x[0]-3)**2 + (x[1]-2)**2 + 1
-Xo = np.array([[0,0],[0,1],[1,0]])
-tol = 1e-6
-itmax = 1000
+# func = lambda x: (x[0]-3)**2 + (x[1]-2)**2 + 1
+# Xo = np.array([[0,0],[0,1],[1,0]])
+# tol = 1e-6
+# itmax = 1000
 
-m = minimize(func, Xo[0],method='Nelder-Mead',tol=tol,options={'maxiter':itmax,'initial_simplex':Xo})
-x = m.x
-f = m.fun
+# m = minimize(func, Xo[0],method='Nelder-Mead',tol=tol,options={'maxiter':itmax,'initial_simplex':Xo})
+# x = m.x
+# f = m.fun
 
-print(m)
+# print(m)
 
 
 
