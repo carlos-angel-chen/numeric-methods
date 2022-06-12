@@ -27,7 +27,7 @@ itmax = 1000
 parameter = np.array([a,b,c,T1,T2])
 
 def read_temp_file():
-    df = pd.read_csv('TP5\\temp.txt',header=None,names=['ti','yi'],sep=' ')
+    df = pd.read_csv('temp.txt',header=None,names=['ti','yi'],sep=' ')
     ti = np.array(df['ti'].tolist())
     yi = np.array(df['yi'].tolist())
     N = len(ti)
