@@ -19,7 +19,7 @@ def minimi(func,Xo,tol,itmax):
 
 
 
-def minimi_(func,Xo,tol,itmax):
+def minimi_(func,grad,Xo,tol,itmax):
     # Xo = [x1 x2 x3 ... xn+1].T con xi vectores fila
     # xi = Xo[i,:] = Xo[i]
     # Filas = numero de puntos
@@ -28,8 +28,91 @@ def minimi_(func,Xo,tol,itmax):
     if n!=d+1:
         print("ERROR: n must be equal to d+1")
         return Xo[0],func(Xo[0])
-    #f = np.zeros((n,1))
-    f = np.array([func(xi) for xi in Xo])
 
-    pass
+    f = np.array([func(xi) for xi in Xo])
+    i = f.argsort()
+    f = f[i]
+    Xo = Xo[i]
+
+    x = Xo[0]
+    o = 0
+    b = n-2
+    p = n-1
+    S = np.sum(Xo[0:d],axis=0)
+    for k in range(iter):
+        if np.linalg.norm(Xo[o]-Xo[p]) < tol:
+            break
+        M = S/d
+
+        #REFLECTION
+        R = 2*M - Xo[p]
+        fR = func(R)
+        if fR < f[b]:
+            if f[o] < fR:
+                l=1
+                while fR >= f(l):
+                    l += 1
+                I = np.array([i for i in range(l)]+[p]+[i for i in range(l,p)],dtype=np.int64)
+                Xo[p] = R
+                Xo = Xo[I]#np.array([Xo[0:l], R, Xo[l:(b+1)]])
+                f = f[I]#np.array
+                S = S - Xo[p] + R
+
+            else:
+                #EXPANDO
+                E = 3*M-2*Xo[p]
+                fE = func(E)
+                if fE < f[o]:
+                    I = np.array([p]+[i for i in range(p)],dtype=np.int64)
+                    Xo[p] = E
+                    f[p] = fE
+                    Xo = Xo[I]
+                    f = f[I]
+                    S = S - Xo[p] + E
+                else:
+                    I = np.array([p]+[i for i in range(p)],dtype=np.int64)
+                    Xo[p] = R
+                    f[p] = fR
+                    Xo = Xo[I]
+                    f = f[I]
+                    S = S - Xo[p] + R
+        else:
+            if fR < f[p]:
+                Xo[p] = R
+                f[p] = fR
+                #S = S - Xo[p] + R
+            else:
+                # CONTRAIGO
+                C1 = (Xo[p]+M)/2
+                C2 = (R+M)/2
+                fC1 = func(C1)
+                fC2 = func(C2)
+                if fC1 < fC2:
+                    C = C1
+                    fC = fC1
+                else:
+                    C = C2
+                    fC = fC2
+                if fC < f(p):
+                    l = 0
+                    while fC >= f[l]:
+                        l += 1
+
+                    I = np.array([i for i in range(l)]+[p]+[i for i in range(l,p)],dtype=np.int64)
+                    Xo[p] = C
+                    f[p] = fC
+                    Xo = Xo[I]
+                    f = f[I]
+                    S = S - Xo[p] + C
+                else:
+                    # ENCOJO
+                    for l in range(1,n):
+                        Xo[l] = (Xo[l]+x)/2
+                        f[l] = func(Xo[l])
+                    i = f.argsort()
+                    f = f[i]
+                    Xo = Xo[i]
+                    S = np.sum(Xo[0:d],axis=0)
+        x = Xo[o]   
+    return Xo[o],f[o],k
 

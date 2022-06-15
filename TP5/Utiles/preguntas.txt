@@ -1,6 +1,8 @@
--no gradiente
--puntos iniciales como?
+OK-no gradiente
+...-puntos iniciales como?
 -como ordeno (sort(f))
+
+-Que debe devolver la funcion???
 #-como leo archivo (o copio a array)
 
--un arreglo con el error del ajuste (1 elem)
+...-un arreglo con el error del ajuste (1 elem)
