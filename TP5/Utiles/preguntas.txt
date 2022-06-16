@@ -6,3 +6,17 @@ OK-no gradiente
 #-como leo archivo (o copio a array)
 
 ...-un arreglo con el error del ajuste (1 elem)
+
+---------------------------------------------------
+CON LIBRERIA
+
+1000
+[ 3.57996931e+01 -1.74856886e-05  1.00007128e+00  1.13453811e+01  
+ -2.47433265e-01]     
+0.005028278272061971
+
+NUESTRA VERSION
+
+63
+[10  0  0 19 11]
+666.1280750827982

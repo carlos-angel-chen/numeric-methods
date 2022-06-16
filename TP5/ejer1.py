@@ -1,7 +1,7 @@
 from scipy.optimize import minimize
 import numpy as np
 
-def minimi(func,Xo,tol,itmax):
+def minimi(func,grad,Xo,tol,itmax):
     m = minimize(func, Xo[0],method='Nelder-Mead',tol=tol,options={'maxiter':itmax,'initial_simplex':Xo})
     #return Xo[0,:],func(Xo[0,:]),itmax
     return m.x,m.fun,m.nit
@@ -39,8 +39,10 @@ def minimi_(func,grad,Xo,tol,itmax):
     b = n-2
     p = n-1
     S = np.sum(Xo[0:d],axis=0)
-    for k in range(iter):
-        if np.linalg.norm(Xo[o]-Xo[p]) < tol:
+    for k in range(itmax):
+        if np.linalg.norm(Xo[o]-Xo[p]) < tol and np.linalg.norm(f[o]-f[p]) < tol:
+            print(Xo)
+            print(f)
             break
         M = S/d
 
@@ -50,7 +52,7 @@ def minimi_(func,grad,Xo,tol,itmax):
         if fR < f[b]:
             if f[o] < fR:
                 l=1
-                while fR >= f(l):
+                while fR >= f[l]:
                     l += 1
                 I = np.array([i for i in range(l)]+[p]+[i for i in range(l,p)],dtype=np.int64)
                 Xo[p] = R
@@ -93,7 +95,7 @@ def minimi_(func,grad,Xo,tol,itmax):
                 else:
                     C = C2
                     fC = fC2
-                if fC < f(p):
+                if fC < f[p]:
                     l = 0
                     while fC >= f[l]:
                         l += 1
