@@ -1,120 +1,84 @@
-from scipy.optimize import minimize
 import numpy as np
-
-def minimi(func,grad,Xo,tol,itmax):
-    m = minimize(func, Xo[0],method='Nelder-Mead',tol=tol,options={'maxiter':itmax,'initial_simplex':Xo})
-    #return Xo[0,:],func(Xo[0,:]),itmax
-    return m.x,m.fun,m.nit
-# FACU ACA TA LA COSA
-# func = lambda x: (x[0]-3)**2 + (x[1]-2)**2 + 1
-# Xo = np.array([[0,0],[0,1],[1,0]])
-# tol = 1e-6
-# itmax = 1000
-
-# m = minimize(func, Xo[0],method='Nelder-Mead',tol=tol,options={'maxiter':itmax,'initial_simplex':Xo})
-# x = m.x
-# f = m.fun
-
-# print(m)
-
-
+import random
 
 def minimi_(func,grad,Xo,tol,itmax):
+    from scipy.optimize import minimize
+    m = minimize(func, Xo,method='Nelder-Mead',tol=tol,options={'maxiter':itmax})
+    #return Xo[0,:],func(Xo[0,:]),itmax
+    return m.x,m.fun,m.nit
+
+def get_nearby_point(xo):
+    x = np.array(xo,dtype=np.double)
+    for i in range(len(x)):
+        x[i] = x[i] * (1 + (random.random()-0.5)/10)
+    return x
+
+def evaluate_and_order(X,func):
+    f = np.array([func(xi) for xi in X])
+    i = f.argsort()
+    return X[i],f[i]
+
+def replace_point(X,f,func,R,pos,p,S):
+    I = np.array([i for i in range(pos)] + [p] + [i for i in range(pos,p)],dtype=np.int64)
+    X[p] = R; f[p] = func(R)
+    X, f = X[I], f[I]
+    return X, f, S - X[p] + R
+
+def get_pos(fR,f):
+    for i,fi in enumerate(f):
+        if fR < fi:
+            break
+    return i
+
+def minimi(func,grad,xo,tol,itmax):
     # Xo = [x1 x2 x3 ... xn+1].T con xi vectores fila
     # xi = Xo[i,:] = Xo[i]
     # Filas = numero de puntos
     # Columnas = dimension del problema
-    n,d = Xo.shape
-    if n!=d+1:
-        print("ERROR: n must be equal to d+1")
-        return Xo[0],func(Xo[0])
-
-    f = np.array([func(xi) for xi in Xo])
-    i = f.argsort()
-    f = f[i]
-    Xo = Xo[i]
-
-    x = Xo[0]
+    random.seed()
+    n = len(xo)
     o = 0
-    b = n-2
-    p = n-1
-    S = np.sum(Xo[0:d],axis=0)
+    b = n - 1
+    p = n
+
+    X = np.array([get_nearby_point(xo) for i in range(n+1)])
+    X,f = evaluate_and_order(X,func)
+    S = X[0:n].sum()
+
     for k in range(itmax):
-        if np.linalg.norm(Xo[o]-Xo[p]) < tol and np.linalg.norm(f[o]-f[p]) < tol:
-            print(Xo)
-            print(f)
+        print(f'iteration number {k+1}')
+        if np.linalg.norm(X[o]-X[p]) < tol and np.linalg.norm(f[o]-f[p]) < tol:
             break
-        M = S/d
+        M = S / n
 
-        #REFLECTION
-        R = 2*M - Xo[p]
-        fR = func(R)
-        if fR < f[b]:
-            if f[o] < fR:
-                l=1
-                while fR >= f[l]:
-                    l += 1
-                I = np.array([i for i in range(l)]+[p]+[i for i in range(l,p)],dtype=np.int64)
-                Xo[p] = R
-                Xo = Xo[I]#np.array([Xo[0:l], R, Xo[l:(b+1)]])
-                f = f[I]#np.array
-                S = S - Xo[p] + R
-
+        # REFLEXIÓN
+        R = 2*M - X[p]; fR = func(R)
+        if fR < f[o]:
+            # EXPANSIÓN
+            E = 3*M - 2*X[p]; fE = func(E)
+            if fE < f[o]:
+                X,f,S = replace_point(X,f,func,E,o,p,S)
             else:
-                #EXPANDO
-                E = 3*M-2*Xo[p]
-                fE = func(E)
-                if fE < f[o]:
-                    I = np.array([p]+[i for i in range(p)],dtype=np.int64)
-                    Xo[p] = E
-                    f[p] = fE
-                    Xo = Xo[I]
-                    f = f[I]
-                    S = S - Xo[p] + E
-                else:
-                    I = np.array([p]+[i for i in range(p)],dtype=np.int64)
-                    Xo[p] = R
-                    f[p] = fR
-                    Xo = Xo[I]
-                    f = f[I]
-                    S = S - Xo[p] + R
+                X,f,S = replace_point(X,f,func,R,o,p,S)
         else:
             if fR < f[p]:
-                Xo[p] = R
-                f[p] = fR
-                #S = S - Xo[p] + R
+                i = get_pos(fR,f)
+                X,f,S = replace_point(X,f,func,R,i,p,S)
             else:
-                # CONTRAIGO
-                C1 = (Xo[p]+M)/2
-                C2 = (R+M)/2
-                fC1 = func(C1)
-                fC2 = func(C2)
-                if fC1 < fC2:
-                    C = C1
-                    fC = fC1
+                # CONTRACCIÓN
+                C1, C2 = (R+M)/2, (X[p]+M)/2
+                fC1,fC2 = func(C1),func(C2)
+                if fC1<fC2:
+                    C,fC = C1,fC1
                 else:
-                    C = C2
-                    fC = fC2
+                    C,fC = C2,fC2
                 if fC < f[p]:
-                    l = 0
-                    while fC >= f[l]:
-                        l += 1
-
-                    I = np.array([i for i in range(l)]+[p]+[i for i in range(l,p)],dtype=np.int64)
-                    Xo[p] = C
-                    f[p] = fC
-                    Xo = Xo[I]
-                    f = f[I]
-                    S = S - Xo[p] + C
+                    i = get_pos(fC,f)
+                    X,f,S = replace_point(X,f,func,C,i,p,S)
                 else:
-                    # ENCOJO
-                    for l in range(1,n):
-                        Xo[l] = (Xo[l]+x)/2
-                        f[l] = func(Xo[l])
-                    i = f.argsort()
-                    f = f[i]
-                    Xo = Xo[i]
-                    S = np.sum(Xo[0:d],axis=0)
-        x = Xo[o]   
-    return Xo[o],f[o],k
-
+                    # ENCOGIMIENTO
+                    for i in range(1,n+1):
+                        X[i] = (X[i] + X[o])/2
+                    X,f = evaluate_and_order(X,func)
+                    S = X[0:n].sum()
+    return X[o],f[o],k

@@ -1,5 +1,8 @@
 OK-no gradiente
-...-puntos iniciales como?
+
+OK-puntos iniciales como?
+->Implementarlo!!!
+
 -como ordeno (sort(f))
 
 -Que debe devolver la funcion???
@@ -20,3 +23,23 @@ NUESTRA VERSION
 63
 [10  0  0 19 11]
 666.1280750827982
+
+CORREGIDO:
+
+... WIP
+
+----------------------------------------------------
+TRAS CAMBIAR COMO SE CALCULA LA FUNCION PARA f2
+
+CON LIBRERIA
+378
+[ 3.57996704e+01 -1.04087187e-03  3.85651132e-04  1.72207877e+01       
+ -7.92913696e+00]
+0.5050645392507427
+
+NUESTRA VERSION
+49
+[10.40662774  9.57440397  9.7097585  11.07269367 11.35839885]
+737.4982507269424
+
+mmmm
