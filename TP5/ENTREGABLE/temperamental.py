@@ -1,12 +1,6 @@
 import numpy as np
 import random
 
-def minimi_(func,grad,Xo,tol,itmax):
-    from scipy.optimize import minimize
-    m = minimize(func, Xo,method='Nelder-Mead',tol=tol,options={'maxiter':itmax})
-    #return Xo[0,:],func(Xo[0,:]),itmax
-    return m.x,m.fun,m.nit
-
 def get_nearby_point(xo):
     x = np.array(xo,dtype=np.longdouble)
     for i in range(len(x)):
@@ -30,93 +24,65 @@ def get_pos(fR,f):
             break
     return i
 
+#Función:   minimi
+#           Encuentra el mínimo local de una función dada, mediante
+#           el método de optimización de Nelder-Mead
+#Recibe:    func: Función que se quiere optimizar
+#           grad: Gradiente de la función anterior (no se emplea en este método)
+#           xo:   Punto inicial para iterar
+#           tol:  Tolerancia máxima entre la función evaluada en el punto óptimo y el peor
+#           itmax:Numero máximo de iteraciones.
+#Devuelve:  t:     arreglo con los instantes de tiempo
+#           x:     aproximaciones numéricas a x (una fila por instante de tiempo)
 def minimi(func,grad,xo,tol,itmax):
-    # Xo = [x1 x2 x3 ... xn+1].T con xi vectores fila
-    # xi = Xo[i,:] = Xo[i]
-    # Filas = numero de puntos
-    # Columnas = dimension del problema
-    random.seed()
-    n = len(xo)
-    o = 0
-    b = n - 1
-    p = n
+    random.seed() # Para conseguir n+1 puntos iniciales, se inicializa la librería random
+
+    n = len(xo) # Dimensión del problema
+    o = 0       # Índice del punto óptimo
+    b = n - 1   # Índice del punto bueno
+    p = n       # Índice del punto peor
 
     X = np.array([get_nearby_point(xo) for i in range(n+1)])
     X,f = evaluate_and_order(X,func)
     S = X[0:n].sum(axis=0)
 
-    print("Inicial")
-    printXf(X,f)
     for k in range(itmax):
-        print(f'iteration number {k+1}')
         if np.linalg.norm(X[o]-X[p]) < tol and np.linalg.norm(f[o]-f[p]) < tol:
             break
         M = S / n
-        print(f'M = {M}')
 
         # REFLEXIÓN
         R = 2*M - X[p]; fR = func(R)
-        print(f'R = {R}\tf(R) = {fR}')
         if fR < f[b]:
-            print("f(R) < f(B)")
             if fR > f[o]:
-                print("f(R) > f(O)")
                 i = get_pos(fR,f)
-                print(f'ME QUEDO CON R, POSICION {i+1}')
                 X,f,S = replace_point(X,f,func,R,i,p,S)
             else:
-                print("f(R) <=f(O)")
+                # EXPANSION
                 E = 3*M - 2*X[p]; fE = func(E)
-                print(f'E = {E}\tf(E) = {fE}')
                 if fE < f[o]:
-                    print("f(E) < f(O)")
-                    print(f'ME QUEDO CON E, POSICION {o+1}')
                     X,f,S = replace_point(X,f,func,E,o,p,S)
                 else:
-                    print("f(E) >=f(O)")
-                    print(f'ME QUEDO CON R, POSICION {o+1}')
                     X,f,S = replace_point(X,f,func,R,o,p,S)
         else:
-            print("f(R) >=f(B)")
             if fR < f[p]:
-                print("f(R) < f(P)")
                 i = get_pos(fR,f)
-                print(f'ME QUEDO CON R, POSICION {i+1}')
                 X,f,S = replace_point(X,f,func,R,i,p,S)
             else:
                 # CONTRACCIÓN
-                print("f(R) >=f(P)")
                 C1, C2 = (R+M)/2, (X[p]+M)/2
                 fC1,fC2 = func(C1),func(C2)
-                print(f'C1 = {C1}\tf(C1) = {fC1}')
-                print(f'C2 = {C2}\tf(C2) = {fC2}')
                 if fC1<fC2:
                     C,fC = C1,fC1
                 else:
                     C,fC = C2,fC2
-                print(f'C = {C}\tf(C2) = {fC}')
                 if fC < f[p]:
-                    print("f(C) < f(P)")
                     i = get_pos(fC,f)
-                    print(f'ME QUEDO CON C, POSICION {i+1}')
                     X,f,S = replace_point(X,f,func,C,i,p,S)
                 else:
                     # ENCOGIMIENTO
-                    print("f(C) >=f(P)")
-                    print("ENCOJO!!!")
                     for i in range(1,n+1):
                         X[i] = (X[i] + X[o])/2
                     X,f = evaluate_and_order(X,func)
                     S = X[0:n].sum(axis=0)
-        printXf(X,f)
     return X[o],f[o],k
-
-def printXf(X,f):
-    for i in range(len(X)):
-        print(f'{i+1}: x = {X[i]} \t f = {f[i]}')
-
-def func(X):
-    return np.sin((X[0]/100)**2 + (X[1]/100)**2)
-
-xo,fo,k = minimi(func,None,np.array([100,100]),1e-12,1000)
-print(xo,fo,k)

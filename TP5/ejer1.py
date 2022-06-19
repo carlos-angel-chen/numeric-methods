@@ -46,7 +46,6 @@ def minimi(func,grad,xo,tol,itmax):
     S = X[0:n].sum(axis=0)
 
     for k in range(itmax):
-        #print(f'iteration number {k+1}')
         if np.linalg.norm(X[o]-X[p]) < tol and np.linalg.norm(f[o]-f[p]) < tol:
             break
         M = S / n
@@ -58,6 +57,7 @@ def minimi(func,grad,xo,tol,itmax):
                 i = get_pos(fR,f)
                 X,f,S = replace_point(X,f,func,R,i,p,S)
             else:
+                # EXPANSION
                 E = 3*M - 2*X[p]; fE = func(E)
                 if fE < f[o]:
                     X,f,S = replace_point(X,f,func,E,o,p,S)
