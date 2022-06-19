@@ -53,13 +53,16 @@ def minimi(func,grad,xo,tol,itmax):
 
         # REFLEXIÓN
         R = 2*M - X[p]; fR = func(R)
-        if fR < f[o]:
-            # EXPANSIÓN
-            E = 3*M - 2*X[p]; fE = func(E)
-            if fE < f[o]:
-                X,f,S = replace_point(X,f,func,E,o,p,S)
+        if fR < f[b]:
+            if fR > f[o]:
+                i = get_pos(fR,f)
+                X,f,S = replace_point(X,f,func,R,i,p,S)
             else:
-                X,f,S = replace_point(X,f,func,R,o,p,S)
+                E = 3*M - 2*X[p]; fE = func(E)
+                if fE < f[o]:
+                    X,f,S = replace_point(X,f,func,E,o,p,S)
+                else:
+                    X,f,S = replace_point(X,f,func,R,o,p,S)
         else:
             if fR < f[p]:
                 i = get_pos(fR,f)
