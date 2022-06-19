@@ -52,10 +52,6 @@ def test():
     spx,spfun,spnit = minimi_(eje2_func, None, X0, tol, itmax)    # minimi de la función i de testbench
     print("X0 temperatura() = ", x)   
     print("X0 scipy.optimize.minimize() = ", spx) 
-    if(np.linalg.norm(x - spx)) > eps: 
-        print("TEMPERATURA(): FAILED")
-    else:
-        print("TEMPERATURA(): PASSED")
     return
 
 #Test: Funcion Esfera R3
