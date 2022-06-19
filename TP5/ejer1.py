@@ -46,7 +46,7 @@ def minimi(func,grad,xo,tol,itmax):
     S = X[0:n].sum()
 
     for k in range(itmax):
-        print(f'iteration number {k+1}')
+        #print(f'iteration number {k+1}')
         if np.linalg.norm(X[o]-X[p]) < tol and np.linalg.norm(f[o]-f[p]) < tol:
             break
         M = S / n
