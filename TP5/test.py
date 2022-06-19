@@ -1,6 +1,7 @@
 from ejer1 import *
 from ejer2_V2 import *
 import numpy as np
+from scipy.optimize import minimize
 
 def test():
     testbench = np.array([
@@ -27,14 +28,15 @@ def test():
         print(testbench[i][0])     
         print("--------------------------------------")                                      
         x, fx, it = minimi(testbench[i][1], None, testbench[i][2][0], tol, itmax)    # minimi de la función i de testbench
-        spx,spfun,spnit = minimi_(testbench[i][1], None, testbench[i][2][0], tol, itmax)    # scipy.optimize.minimize() de la función i de testbench
+        m_sp = minimize(testbench[i][1], testbench[i][2][0],method='Nelder-Mead',tol=tol,options={'maxiter':itmax})
+
 
         print("X0 function = ", testbench[i][3])        
         print("X0 minimi() = ", x)   
-        print("X0 scipy.optimize.minimize() = ", spx)   
+        print("X0 scipy.optimize.minimize() = ", m_sp['x'])   
         print("Iterations minimi(): ", it)           
-        print("Iterations scipy.optimize.minimize(): ", spnit)        
-        if np.linalg.norm(spx - x) > eps:
+        print("Iterations scipy.optimize.minimize(): ", m_sp.nit)        
+        if np.linalg.norm(m_sp.x - testbench[i][3]) > eps:
             print("FAILED")
             failed += 1
         else:
@@ -49,9 +51,9 @@ def test():
     print("--------------------------------------")
 
     x, fx = temperatura()    
-    spx,spfun,spnit = minimi_(eje2_func, None, X0, tol, itmax)    # minimi de la función i de testbench
+    m_sp = minimize(eje2_func, X0,method='Nelder-Mead',tol=tol,options={'maxiter':itmax})
     print("X0 temperatura() = ", x)   
-    print("X0 scipy.optimize.minimize() = ", spx) 
+    print("X0 scipy.optimize.minimize() = ", m_sp['x']) 
     return
 
 #Test: Funcion Esfera R3
