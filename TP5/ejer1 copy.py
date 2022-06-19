@@ -8,7 +8,7 @@ def minimi_(func,grad,Xo,tol,itmax):
     return m.x,m.fun,m.nit
 
 def get_nearby_point(xo):
-    x = np.array(xo,dtype=np.double)
+    x = np.array(xo,dtype=np.longdouble)
     for i in range(len(x)):
         x[i] = x[i] * (1 + (random.random()-0.5)/10)
     return x
@@ -103,7 +103,7 @@ def minimi(func,grad,xo,tol,itmax):
                 else:
                     # ENCOGIMIENTO
                     print("f(C) >=f(P)")
-                    print("ENCOJO!!!")
+                    print("ENCOJO!!!\n\n\n")
                     for i in range(1,n+1):
                         X[i] = (X[i] + X[o])/2
                     X,f = evaluate_and_order(X,func)
@@ -116,7 +116,7 @@ def printXf(X,f):
         print(f'{i+1}: x = {X[i]} \t f = {f[i]}')
 
 def func(X):
-    return X[0]**2 + X[1]**2
+    return np.sin((X[0]/100)**2 + (X[1]/100)**2)
 
-xo,fo,k = minimi(func,None,np.array([10,10]),1e-9,1000)
+xo,fo,k = minimi(func,None,np.array([100,100]),1e-12,1000)
 print(xo,fo,k)

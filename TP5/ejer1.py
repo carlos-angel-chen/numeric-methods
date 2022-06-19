@@ -8,7 +8,7 @@ def minimi_(func,grad,Xo,tol,itmax):
     return m.x,m.fun,m.nit
 
 def get_nearby_point(xo):
-    x = np.array(xo,dtype=np.double)
+    x = np.array(xo,dtype=np.longdouble)
     for i in range(len(x)):
         x[i] = x[i] * (1 + (random.random()-0.5)/10)
     return x
