@@ -52,11 +52,11 @@ def temperatura():
     global ti, yi, N
     ti, yi, N = read_temp_file()
     param, param_eval, cant_ite = minimi(eje2_func, None, X0, tol, itmax)
-    print(cant_ite)
+    #print(cant_ite)
 
     return param, param_eval
 
 
-param, param_eval = temperatura()
-print(param)
-print(param_eval)
+# param, param_eval = temperatura()
+# print(param)
+# print(param_eval)
