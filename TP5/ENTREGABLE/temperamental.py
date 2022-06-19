@@ -221,7 +221,7 @@ def test():
     print("X0 scipy.optimize.minimize() = ", m_sp['x']) 
     return
 
-# Funciones de optimizacion con puntos iniciales de prueba y minimo global
+# Funciones de optimizacion para testbech de algoritmo
 #Test: Funcion Esfera R3
 def f1(x):
     return x[0]**2 + x[1]**2 + x[2]**2
