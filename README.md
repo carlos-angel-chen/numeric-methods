@@ -16,3 +16,11 @@ The class initialization function should receive a double-precision floating-poi
 - equality comparison: a == b; inequality comparison: a != b.
 
 Write in the same file a function with no arguments called test that tests the correct operation of the implemented class.
+
+## TP2: 
+Write a function that solves the linear least squares problem using Cholesky decomposition.
+
+## TP3:
+
+## TP4: 
+Write a function that implements the Runge-Kutta 4 method to solve a system of differential equations.
